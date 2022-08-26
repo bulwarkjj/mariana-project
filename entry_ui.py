@@ -8,19 +8,15 @@ import tkinter as tk
 from tkinter import messagebox
 import csv
 import datetime
+import os
 
-csv_list = []
-
-# TODO These two functions add the entries to a CSV file but appending the data creates a new header row
-# FIXME Need to figure out how to just append the data not header to CSV
-# Thought maybe use a temp dir to store recent data and access it, than store it on to the main artifacts of the folder
-# I will create to hold all data on host desktop
-def add_entry_data():
+    
+def add_to_csv():
+    """ 
+    Storing entry data to csv 
     """
-    Method to store entry user input into list of add _to_csv()
-
-    """
-
+    filename = "artifacts/metrics.csv"
+    csv_list = []
     entry_list = [
         week_start_entry.get(),
         week_end_entry.get(),
@@ -30,16 +26,16 @@ def add_entry_data():
     ]
 
     csv_list.append(entry_list)
-    messagebox.showinfo("Information has been saved")
-    
-def add_to_csv():
-    """ 
-    Storing entry data to csv 
-    """
-    with open("artifacts/metrics.csv", "a") as file:
-        write_to_csv = csv.writer(file)
-        write_to_csv.writerow(["weekstart", "weekend", "new", "reopend", "closed"])
-        write_to_csv.writerows(csv_list)
+
+    if os.path.isfile(filename):
+        with open(filename, "a", newline='') as file:
+            write_to_csv = csv.writer(file)
+            write_to_csv.writerows(csv_list)
+    else:
+        with open(filename, "w", newline='') as file:
+            write_to_csv = csv.writer(file)
+            write_to_csv.writerow(["weekstart", "weekend", "new", "reopend", "closed"])
+            write_to_csv.writerows(csv_list)
     messagebox.showinfo("data has been added to mertic CSV")
 
 
@@ -72,11 +68,6 @@ save_button = tk.Button(
     command=add_to_csv
 )
 
-add_button = tk.Button(
-    window,
-    text="add data to list",
-    command=add_entry_data
-)
 
 # UI layout
 # labels
@@ -95,7 +86,7 @@ closed_projects_entry.grid(row=4, column=1, sticky= tk.W, pady= 2)
 
 # Buttons
 save_button.grid(row=5, column=1, sticky="nsew", pady=2)
-add_button.grid(row=6, column=1, sticky="nsew", pady=2)
+
 
 
 
