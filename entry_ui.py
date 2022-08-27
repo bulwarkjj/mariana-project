@@ -10,7 +10,10 @@ import csv
 import datetime
 import os
 
-    
+""" 
+new_window = TopLevel(master) - creates the ability to create a new window from parent window
+
+"""
 def add_to_csv():
     """ 
     Storing entry data to csv 
