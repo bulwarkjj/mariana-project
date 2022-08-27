@@ -10,6 +10,8 @@ import csv
 import datetime
 import os
 
+from entry_class import EntryWithPlaceholder
+
 def entry_window():
     """ 
     Creates a new window for user to enter data
@@ -44,23 +46,28 @@ def entry_window():
 
     new_window = tk.Toplevel()
     new_window.title("Report Metrics")
+
     # adjusting grid for re-sizing of window
     tk.Grid.rowconfigure(new_window, (0,1,2,3,4), weight=1)
     tk.Grid.columnconfigure(new_window, (0,1), weight=1)
 
     # labels
+    
     week_start_label = tk.Label(new_window, text="Enter beginng of week: ")
     week_end_label = tk.Label(new_window, text="Enter end of week: ")
     new_projects_label = tk.Label(new_window, text="Enter number of new projects: ")
-    reopend_projects_label = tk.Label(new_window, text="Enter number of reopend projects: ")
+    active_projects_label = tk.Label(new_window, text="Enter number of reopend projects: ")
     closed_projects_label = tk.Label(new_window, text="Enter the number of closed projects: ")
+    reopened_projects_label = tk.Label(new_window, text="Enter number of re-opened projects")
 
     # User input entries for labels
-    week_start_entry = tk.Entry(new_window)
-    week_end_entry = tk.Entry(new_window)
-    new_projects_entry = tk.Entry(new_window)
-    reopend_projects_entry = tk.Entry(new_window)
-    closed_projects_entry = tk.Entry(new_window)
+    
+    week_start_entry = EntryWithPlaceholder(new_window, "01/01/2022")
+    week_end_entry = EntryWithPlaceholder(new_window, "01/30/2022")
+    new_projects_entry = EntryWithPlaceholder(new_window, "42")
+    active_projects_entry = EntryWithPlaceholder(new_window, "42")
+    closed_projects_entry = EntryWithPlaceholder(new_window, "42")
+    reopened_projects_entry = EntryWithPlaceholder(new_window, "42")
 
     # buttons
     save_button = tk.Button(
@@ -74,21 +81,24 @@ def entry_window():
     UI layout
     """
     # labels
+    # TODO create new label.grid for "reopened_projects"
     week_start_label.grid(row=0, column=0, sticky= "nsew", pady= 2)
     week_end_label.grid(row=1, column=0, sticky= "nsew", pady= 2)
     new_projects_label.grid(row=2, column=0, sticky= "nsew", pady= 2)
-    reopend_projects_label.grid(row=3, column=0, sticky= "nsew", pady= 2)
+    active_projects_label.grid(row=3, column=0, sticky= "nsew", pady= 2)
     closed_projects_label.grid(row=4, column=0, sticky= "nsew", pady= 2)
 
     # Entries
+    # TODO create new entry.grid for "reopened_projects"
     week_start_entry.grid(row=0, column=1, sticky= tk.W, pady= 2)
     week_end_entry.grid(row=1, column=1, sticky= tk.W, pady= 2)
     new_projects_entry.grid(row=2, column=1, sticky= tk.W, pady= 2)
-    reopend_projects_entry.grid(row=3, column=1, sticky= tk.W, pady= 2)
+    active_projects_entry.grid(row=3, column=1, sticky= tk.W, pady= 2)
     closed_projects_entry.grid(row=4, column=1, sticky= tk.W, pady= 2)
 
     # Buttons
     save_button.grid(row=5, column=1, sticky="nsew", pady=2)
+
 
 """ 
 Functionality/variables/methods
@@ -106,11 +116,10 @@ quartely_label = tk.Label(window, text="Enter quarter(s) of metrics wanted: ")
 year_label = tk.Label(window, text="Enter year for total metrics of that year: ")
 
 # User input entries for labels
-create_entry = tk.Entry(window)
-week_entry = tk.Entry(window)
-range_entry = tk.Entry(window)
-quartely_entry = tk.Entry(window)
-year_entry = tk.Entry(window)
+week_entry = EntryWithPlaceholder(window, "07/22/2022")
+range_entry = EntryWithPlaceholder(window, "01/01/2022-08/08/2022")
+quartely_entry = EntryWithPlaceholder(window, "q1")
+year_entry = EntryWithPlaceholder(window, "2022")
 
 # buttons
 create_button = tk.Button(
@@ -144,7 +153,7 @@ year_entry.grid(row=4, column=1, sticky= tk.W, pady= 2)
 """ 
 closes window, using it for testing right now, but should create a button to close window 
 """
-window.after(30000,lambda:window.destroy())
+window.after(300000,lambda:window.destroy())
 
 
 window.mainloop()
