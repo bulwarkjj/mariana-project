@@ -3,12 +3,10 @@ UI for entering data, searching data stored, and presenting graph
 
 maintainer: Matthew Moroge
 """
-
 import tkinter as tk
-from tkinter import messagebox
-import csv
-import datetime
+from datetime import datetime
 import os
+import yaml
 
 from entry_class import EntryWithPlaceholder
 
@@ -17,38 +15,60 @@ def entry_window():
     Creates a new window for user to enter data
     """
 
-    def add_to_csv():
+    def add_to_yaml():
         """ 
         Storing entry data to csv 
         """
-        filename = "artifacts/metrics.csv"
-        csv_list = []
-        entry_list = [
-            week_start_entry.get(),
-            week_end_entry.get(),
-            new_projects_entry.get(),
-            reopend_projects_entry.get(),
-            closed_projects_entry.get()
-        ]
+        date = datetime.now()
+        cur_year = date.year
+        filename = "data.yaml"
+        yaml_file_path = os.path.join(os.getcwd(), f"artifacts/{filename}")
+        
+        
+        entry_dict= {
+            f"{week_start_entry.get()}-{week_end_entry.get()}":{
 
-        csv_list.append(entry_list)
+            "weekstart": week_start_entry.get(),
+            "weekend": week_end_entry.get(),
+            "new": new_projects_entry.get(),
+            "reopened": reopened_projects_entry.get(),
+            "closed": closed_projects_entry.get()
+            }
+        }
 
-        if os.path.isfile(filename):
-            with open(filename, "a", newline='') as file:
-                write_to_csv = csv.writer(file)
-                write_to_csv.writerows(csv_list)
+        new_dict= {
+            cur_year: {
+                f"{week_start_entry.get()}-{week_end_entry.get()}":{
+
+                    "weekstart": week_start_entry.get(),
+                    "weekend": week_end_entry.get(),
+                    "new": new_projects_entry.get(),
+                    "reopened": reopened_projects_entry.get(),
+                    "closed": closed_projects_entry.get()
+                }
+            }
+        }
+
+
+        
+
+        if os.path.isfile(yaml_file_path):
+            with open(yaml_file_path, "r") as yamlfile:
+                cur_yaml = yaml.safe_load(yamlfile)
+                cur_yaml[cur_year].update(entry_dict)
+            if cur_yaml:
+                with open(yaml_file_path, "w") as yamlfile:
+                    yaml.safe_dump(cur_yaml, yamlfile)
         else:
-            with open(filename, "w", newline='') as file:
-                write_to_csv = csv.writer(file)
-                write_to_csv.writerow(["weekstart", "weekend", "new", "reopend", "closed"])
-                write_to_csv.writerows(csv_list)
+            with open(yaml_file_path, "w") as yamlfile:
+                yaml.safe_dump(new_dict, yamlfile)
         new_window.withdraw()
 
     new_window = tk.Toplevel()
     new_window.title("Report Metrics")
 
     # adjusting grid for re-sizing of window
-    tk.Grid.rowconfigure(new_window, (0,1,2,3,4), weight=1)
+    tk.Grid.rowconfigure(new_window, (0,1,2,3,4,5), weight=1)
     tk.Grid.columnconfigure(new_window, (0,1), weight=1)
 
     # labels
@@ -56,7 +76,7 @@ def entry_window():
     week_start_label = tk.Label(new_window, text="Enter beginng of week: ")
     week_end_label = tk.Label(new_window, text="Enter end of week: ")
     new_projects_label = tk.Label(new_window, text="Enter number of new projects: ")
-    active_projects_label = tk.Label(new_window, text="Enter number of reopend projects: ")
+    active_projects_label = tk.Label(new_window, text="Enter number of active projects: ")
     closed_projects_label = tk.Label(new_window, text="Enter the number of closed projects: ")
     reopened_projects_label = tk.Label(new_window, text="Enter number of re-opened projects")
 
@@ -73,7 +93,7 @@ def entry_window():
     save_button = tk.Button(
         new_window,
         text="Save",
-        command=add_to_csv
+        command=add_to_yaml
     )
 
 
@@ -81,20 +101,20 @@ def entry_window():
     UI layout
     """
     # labels
-    # TODO create new label.grid for "reopened_projects"
     week_start_label.grid(row=0, column=0, sticky= "nsew", pady= 2)
     week_end_label.grid(row=1, column=0, sticky= "nsew", pady= 2)
     new_projects_label.grid(row=2, column=0, sticky= "nsew", pady= 2)
     active_projects_label.grid(row=3, column=0, sticky= "nsew", pady= 2)
-    closed_projects_label.grid(row=4, column=0, sticky= "nsew", pady= 2)
+    reopened_projects_label.grid(row=4, column=0, sticky="nsew", pady=2)
+    closed_projects_label.grid(row=5, column=0, sticky= "nsew", pady= 2)
 
     # Entries
-    # TODO create new entry.grid for "reopened_projects"
     week_start_entry.grid(row=0, column=1, sticky= tk.W, pady= 2)
     week_end_entry.grid(row=1, column=1, sticky= tk.W, pady= 2)
     new_projects_entry.grid(row=2, column=1, sticky= tk.W, pady= 2)
     active_projects_entry.grid(row=3, column=1, sticky= tk.W, pady= 2)
-    closed_projects_entry.grid(row=4, column=1, sticky= tk.W, pady= 2)
+    reopened_projects_entry.grid(row=4, column=1, sticky=tk.W, pady=2)
+    closed_projects_entry.grid(row=5, column=1, sticky= tk.W, pady= 2)
 
     # Buttons
     save_button.grid(row=5, column=1, sticky="nsew", pady=2)
