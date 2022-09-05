@@ -68,7 +68,7 @@ def entry_window():
     new_window.title("Report Metrics")
 
     # adjusting grid for re-sizing of window
-    tk.Grid.rowconfigure(new_window, (0,1,2,3,4,5), weight=1)
+    tk.Grid.rowconfigure(new_window, (0,1,2,3,4,5,6), weight=1)
     tk.Grid.columnconfigure(new_window, (0,1), weight=1)
 
     # labels
@@ -117,7 +117,7 @@ def entry_window():
     closed_projects_entry.grid(row=5, column=1, sticky= tk.W, pady= 2)
 
     # Buttons
-    save_button.grid(row=5, column=1, sticky="nsew", pady=2)
+    save_button.grid(row=6, column=1, sticky="nsew", pady=2)
 
 
 """ 
