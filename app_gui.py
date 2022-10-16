@@ -22,6 +22,8 @@ def entry_window():
         date = datetime.now()
         cur_year = date.year
         filename = "data.yaml"
+        # FIXME change path location after figuring out folder structure
+        # FIXME this path location is for testing, not production
         yaml_file_path = os.path.join(os.getcwd(), f"artifacts/{filename}")
         
         
