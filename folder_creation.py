@@ -6,7 +6,8 @@ maintainer: Matthew Moroge
 
 import os
 
-desktop_dir = 'C:\\Users\\"%USERNAME%"\\Desktop\\report-metrics'
+#desktop_dir = 'C:\\Users\\"%USERNAME%"\\Desktop\\report-metrics'
+desktop_dir = os.path.join(os.getcwd(), "Desktop")
 
 print(desktop_dir)
 
